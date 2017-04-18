@@ -1,0 +1,31 @@
+# IntelliJ project files
+**/*.iml
+.idea/
+out/
+gen/
+build/
+logs/
+
+# Maven output files
+target/
+
+# Eclipse
+.project
+.classpath
+.settings/
+.metadata
+.gradle
+.checkstyle
+bin/
+tmp/
+*.tmp
+*.bak
+*.swp
+*~.nib
+
+# Local configuration
+gradle-local.properties
+
+# Vagrant folder
+.vagrant/
+*.box
