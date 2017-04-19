@@ -6,24 +6,25 @@ import io.netty.channel.socket.SocketChannel;
 import io.netty.handler.codec.http.DefaultHttpHeaders;
 import io.netty.handler.codec.http.HttpClientCodec;
 import io.netty.handler.codec.http.HttpObjectAggregator;
+import io.netty.handler.codec.http.HttpRequestDecoder;
+import io.netty.handler.codec.http.HttpResponseEncoder;
 import io.netty.handler.codec.http.websocketx.WebSocketClientHandshakerFactory;
 import io.netty.handler.codec.http.websocketx.WebSocketVersion;
 import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketClientCompressionHandler;
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
+import org.apache.kafka.clients.producer.Producer;
 
 import java.net.URI;
 
-/**
- */
-//public class WebSocketSlackRtmInitializer extends ChannelInitializer<SocketChannel> {
-    public class WebSocketSlackRtmInitializer extends ChannelInitializer<SocketChannel> {
+public class WebSocketSlackRtmInitializer extends ChannelInitializer<SocketChannel> {
 
     private final URI uri;
-
-    public WebSocketSlackRtmInitializer(URI uri) {
+    private Producer<String, String> kafkaProducer;
+    public WebSocketSlackRtmInitializer(URI uri, Producer<String, String> kafkaProducer) {
         this.uri = uri;
+        this.kafkaProducer = kafkaProducer;
     }
 
     @Override
@@ -71,10 +72,14 @@ import java.net.URI;
         if (sslCtx != null) {
             pipeline.addLast(sslCtx.newHandler(ch.alloc(), host, port));
         }
+        pipeline.addLast(new HttpKafkaServerHandler(kafkaProducer));
         pipeline.addLast(
                 new HttpClientCodec(),
                 new HttpObjectAggregator(8192),
                 WebSocketClientCompressionHandler.INSTANCE,
                 handler);
+        //pipeline.addLast(new HttpRequestDecoder());
+        //pipeline.addLast(new HttpResponseEncoder());
+
     }
 }

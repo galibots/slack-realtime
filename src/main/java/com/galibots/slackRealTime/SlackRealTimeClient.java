@@ -24,8 +24,11 @@ import io.netty.handler.codec.http.websocketx.extensions.compression.WebSocketCl
 import io.netty.handler.ssl.SslContext;
 import io.netty.handler.ssl.SslContextBuilder;
 import io.netty.handler.ssl.util.InsecureTrustManagerFactory;
-import kafka.javaapi.producer.Producer;
-import kafka.producer.ProducerConfig;
+//import kafka.javaapi.producer.Producer;
+//import kafka.producer.ProducerConfig;
+import org.apache.kafka.clients.producer.KafkaProducer;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerConfig;
 
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
@@ -49,10 +52,11 @@ public final class SlackRealTimeClient {
 
         // Apache Kafka connection
         Properties kafkaProperties = new Properties();
-        kafkaProperties.setProperty("metadata.broker.list", "localhost:9092");
-        kafkaProperties.setProperty("serializer.class", "kafka.serializer.StringEncoder");
-        ProducerConfig kafkaConfig = new ProducerConfig(kafkaProperties);
-        Producer<String, String> kafkaProducer = new Producer<>(kafkaConfig);
+        kafkaProperties.put("bootstrap.servers", "localhost:9092");
+        kafkaProperties.put("key.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+        kafkaProperties.put("value.serializer", "org.apache.kafka.common.serialization.StringSerializer");
+
+        Producer<String, String> kafkaProducer = new KafkaProducer<>(kafkaProperties);
 
 
         // WebSocket connection
@@ -63,7 +67,7 @@ public final class SlackRealTimeClient {
             Bootstrap b = new Bootstrap();
             b.group(group)
                     .channel(NioSocketChannel.class)
-                    .handler(new WebSocketSlackRtmInitializer(uri));
+                    .handler(new WebSocketSlackRtmInitializer(uri, kafkaProducer));
                     //).childHandler(new HttpKafkaServerHandler(kafkaProducer));
 
             //pipeline.addLast();

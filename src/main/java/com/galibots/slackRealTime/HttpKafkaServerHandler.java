@@ -6,8 +6,8 @@ import io.netty.channel.SimpleChannelInboundHandler;
 import io.netty.handler.codec.http.DefaultFullHttpResponse;
 import io.netty.handler.codec.http.FullHttpResponse;
 import io.netty.handler.codec.http.HttpRequest;
-import kafka.javaapi.producer.Producer;
-import kafka.producer.KeyedMessage;
+import org.apache.kafka.clients.producer.Producer;
+import org.apache.kafka.clients.producer.ProducerRecord;
 
 import static io.netty.handler.codec.http.HttpResponseStatus.OK;
 import static io.netty.handler.codec.http.HttpVersion.HTTP_1_1;
@@ -27,17 +27,21 @@ public class HttpKafkaServerHandler extends SimpleChannelInboundHandler<Object> 
 
     @Override
     protected void channelRead0(ChannelHandlerContext ctx, Object msg) {
+
         System.out.println("TODO: llegamos aquí");
+
         if (msg instanceof HttpRequest) {
             HttpRequest httpRequest = (HttpRequest) msg;
 
             String uri = httpRequest.getUri();
 
-            KeyedMessage<String, String> message = new KeyedMessage<>("example", uri);
+            ProducerRecord<String, String> message = new ProducerRecord<>("example", uri);
             kafkaProducer.send(message);
 
             FullHttpResponse response = new DefaultFullHttpResponse(HTTP_1_1, OK);
             ctx.write(response).addListener(ChannelFutureListener.CLOSE);
+        } else {
+            System.out.println("It's not a valid request!");
         }
     }
 }
