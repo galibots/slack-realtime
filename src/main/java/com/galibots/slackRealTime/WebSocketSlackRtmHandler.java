@@ -14,12 +14,12 @@ import io.netty.handler.codec.http.websocketx.WebSocketClientHandshaker;
 import io.netty.handler.codec.http.websocketx.WebSocketFrame;
 import io.netty.util.CharsetUtil;
 
-public class SlackRealTimeClientHandler extends SimpleChannelInboundHandler<Object> {
+public class WebSocketSlackRtmHandler extends SimpleChannelInboundHandler<Object> {
 
     private final WebSocketClientHandshaker handshaker;
     private ChannelPromise handshakeFuture;
 
-    public SlackRealTimeClientHandler(WebSocketClientHandshaker handshaker) {
+    public WebSocketSlackRtmHandler(WebSocketClientHandshaker handshaker) {
         this.handshaker = handshaker;
     }
 
@@ -79,7 +79,6 @@ public class SlackRealTimeClientHandler extends SimpleChannelInboundHandler<Obje
                     WebSocketFrame response = new TextWebSocketFrame(jsonObject.toString());
                     ch.writeAndFlush(response);
                 }
-
             }
 
         } else if (frame instanceof PongWebSocketFrame) {
