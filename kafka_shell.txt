@@ -1,0 +1,16 @@
+
+
+docker run -p 2181:2181 -p 9092:9092 --name kafka --env ADVERTISED_HOST=kafka --env ADVERTISED_PORT=9092 spotify/kafka
+
+docker exec -it kafka /bin/bash
+
+$KAFKA_HOME/bin/kafka-topics.sh --create --zookeeper localhost:2181 --replication-factor 1 --partitions 1 --topic example
+
+$KAFKA_HOME/bin/kafka-topics.sh --list --zookeeper localhost:2181
+
+$KAFKA_HOME/bin/kafka-console-producer.sh --broker-list kafka:9092 --topic example
+
+$KAFKA_HOME/bin/kafka-console-consumer.sh --bootstrap-server kafka:9092 --topic example --from-beginning
+
+
+
