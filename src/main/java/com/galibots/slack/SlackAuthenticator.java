@@ -1,4 +1,4 @@
-package com.galibots.slackRealTime;
+package com.galibots.slack;
 
 import com.eclipsesource.json.JsonObject;
 import org.apache.http.Header;

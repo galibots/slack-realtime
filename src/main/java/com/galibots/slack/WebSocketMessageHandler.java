@@ -1,4 +1,4 @@
-package com.galibots.slackRealTime;
+package com.galibots.slack;
 
 import io.netty.channel.ChannelHandlerContext;
 

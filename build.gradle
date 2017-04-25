@@ -2,7 +2,7 @@ apply plugin: 'java'
 apply plugin: 'application'
 apply plugin: 'groovy'
 
-mainClassName = "com.galibots.slackRealTime.SlackRealTimeServer"
+mainClassName = "com.galibots.slack.SlackClient"
 sourceCompatibility = 1.8
 version = '1.0'
 

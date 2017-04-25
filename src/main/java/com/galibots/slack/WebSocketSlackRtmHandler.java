@@ -1,6 +1,5 @@
-package com.galibots.slackRealTime;
+package com.galibots.slack;
 
-import com.eclipsesource.json.JsonObject;
 import io.netty.channel.Channel;
 import io.netty.channel.ChannelFuture;
 import io.netty.channel.ChannelHandlerContext;

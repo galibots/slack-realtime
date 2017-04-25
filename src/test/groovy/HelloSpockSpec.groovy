@@ -1,4 +1,4 @@
-import com.galibots.slackRealTime.SlackAuthenticator
+import com.galibots.slack.SlackAuthenticator
 
 class HelloSpockSpec extends spock.lang.Specification {
 
